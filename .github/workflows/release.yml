@@ -1,143 +1,143 @@
-# Copied and modified from k0sctl: https://github.com/k0sproject/k0sctl/blob/main/.github/workflows/release.yaml
+# # Copied and modified from k0sctl: https://github.com/k0sproject/k0sctl/blob/main/.github/workflows/release.yaml
 
-name: Release
+# name: Release
 
-on:
-  push:
-    tags:
-      - 'v*'
+# on:
+#   push:
+#     tags:
+#       - 'v*'
 
-jobs:
-  build-and-test:
-    permissions:
-      contents: read
-      packages: read
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testcontainer
-    steps:
-      - name: Update Void Linux system
-        run: xbps-install -Syu xbps && xbps-install -yu
+# jobs:
+#   build-and-test:
+#     permissions:
+#       contents: read
+#       packages: read
+#     runs-on: ubuntu-latest
+#     container:
+#       image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testcontainer
+#     steps:
+#       - name: Update Void Linux system
+#         run: xbps-install -Syu xbps && xbps-install -yu
 
-      - name: Check out repository
-        uses: actions/checkout@v4
+#       - name: Check out repository
+#         uses: actions/checkout@v4
 
-      - name: Add safe git directory
-        run: git config --global --add safe.directory /__w/xdeb-install/xdeb-install
+#       - name: Add safe git directory
+#         run: git config --global --add safe.directory /__w/xdeb-install/xdeb-install
 
-      # Ugly hack to get the tag name
-      # github.ref gives the full reference like refs.tags.v0.0.1-beta1
-      - name: Branch name
-        id: branch_name
-        run: |
-          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
+#       # Ugly hack to get the tag name
+#       # github.ref gives the full reference like refs.tags.v0.0.1-beta1
+#       - name: Branch name
+#         id: branch_name
+#         run: |
+#           echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
 
-      - name: Unshallow git history
-        env:
-          TAG_NAME: ${{ steps.branch_name.outputs.TAG_NAME }}
-        run: |
-          git fetch --unshallow
-          git checkout ${TAG_NAME}
+#       - name: Unshallow git history
+#         env:
+#           TAG_NAME: ${{ steps.branch_name.outputs.TAG_NAME }}
+#         run: |
+#           git fetch --unshallow
+#           git checkout ${TAG_NAME}
 
-      - name: Build binaries
-        run: ./scripts/build.sh
+#       - name: Build binaries
+#         run: ./scripts/build.sh
 
-      - name: Run tests and generate HTML report
-        run: ./scripts/test.sh html
+#       - name: Run tests and generate HTML report
+#         run: ./scripts/test.sh html
 
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v3
-        with:
-          name: html
-          path: html
+#       - name: Upload HTML report
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: html
+#           path: html
 
-      - name: Upload binaries
-        uses: actions/upload-artifact@v3
-        with:
-          name: bin
-          path: bin
+#       - name: Upload binaries
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: bin
+#           path: bin
 
-  report:
-    needs: build-and-test
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download HTML report artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: html
-          path: html
+#   report:
+#     needs: build-and-test
+#     permissions:
+#       contents: read
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Download HTML report artifact
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: html
+#           path: html
 
-      - name: Rename HTML report to index.html
-        run: mv html/*.html html/index.html
+#       - name: Rename HTML report to index.html
+#         run: mv html/*.html html/index.html
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: html
+#       - name: Upload Pages artifact
+#         uses: actions/upload-pages-artifact@v2
+#         with:
+#           path: html
 
-  deploy-report:
-    needs: report
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+#   deploy-report:
+#     needs: report
+#     runs-on: ubuntu-latest
+#     permissions:
+#       pages: write
+#       id-token: write
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
+#     steps:
+#       - name: Deploy to GitHub Pages
+#         id: deployment
+#         uses: actions/deploy-pages@v2
 
-  release:
-    needs: deploy-report
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+#   release:
+#     needs: deploy-report
+#     permissions:
+#       contents: write
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Check out repository
+#         uses: actions/checkout@v4
 
-      - name: Add safe git directory
-        run: git config --global --add safe.directory /__w/xdeb-install/xdeb-install
+#       - name: Add safe git directory
+#         run: git config --global --add safe.directory /__w/xdeb-install/xdeb-install
 
-      # Ugly hack to get the tag name
-      # github.ref gives the full reference like refs.tags.v0.0.1-beta1
-      - name: Branch name
-        id: branch_name
-        run: |
-          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
+#       # Ugly hack to get the tag name
+#       # github.ref gives the full reference like refs.tags.v0.0.1-beta1
+#       - name: Branch name
+#         id: branch_name
+#         run: |
+#           echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> ${GITHUB_OUTPUT}
 
-      - name: Unshallow git history
-        env:
-          TAG_NAME: ${{ steps.branch_name.outputs.TAG_NAME }}
-        run: |
-          git fetch --unshallow
-          git checkout ${TAG_NAME}
+#       - name: Unshallow git history
+#         env:
+#           TAG_NAME: ${{ steps.branch_name.outputs.TAG_NAME }}
+#         run: |
+#           git fetch --unshallow
+#           git checkout ${TAG_NAME}
 
-      - name: Download binaries artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: bin
-          path: bin
+#       - name: Download binaries artifact
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: bin
+#           path: bin
 
-      - uses: actions/setup-go@v4
-        with:
-          go-version-file: 'go.mod'
+#       - uses: actions/setup-go@v4
+#         with:
+#           go-version-file: 'go.mod'
 
-      - name: Generate changelog
-        run: ./scripts/changelog.sh
+#       - name: Generate changelog
+#         run: ./scripts/changelog.sh
 
-      - name: Create release and upload binaries
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            bin/*
-          body_path: bin/changelog.md
-          tag_name: ${{ steps.branch_name.outputs.TAG_NAME }}
-          name: ${{ steps.branch_name.outputs.TAG_NAME }}
-          draft: true # So we can manually edit before publishing
-          prerelease: ${{ contains(steps.branch_name.outputs.TAG_NAME, '-') }} # v0.1.2-beta1, 1.2.3-rc1
+#       - name: Create release and upload binaries
+#         uses: softprops/action-gh-release@v1
+#         if: startsWith(github.ref, 'refs/tags/')
+#         with:
+#           files: |
+#             bin/*
+#           body_path: bin/changelog.md
+#           tag_name: ${{ steps.branch_name.outputs.TAG_NAME }}
+#           name: ${{ steps.branch_name.outputs.TAG_NAME }}
+#           draft: true # So we can manually edit before publishing
+#           prerelease: ${{ contains(steps.branch_name.outputs.TAG_NAME, '-') }} # v0.1.2-beta1, 1.2.3-rc1

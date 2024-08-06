@@ -1,51 +1,51 @@
-{
-    "name": "xdeb-install",
-    "image": "ghcr.io/xdeb-org/xdeb-install:devcontainer",
+// {
+//     "name": "xdeb-install",
+//     "image": "ghcr.io/xdeb-org/xdeb-install:devcontainer",
 
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "golang.Go",
-                "yzhang.markdown-all-in-one",
-                "ms-python.python"
-            ],
-            "settings": {
-                "telemetry.telemetryLevel": "off",
-                "security.workspace.trust.emptyWindow": false,
-                "security.workspace.trust.enabled": false,
-                "extensions.ignoreRecommendations": true,
-                "dev.containers.copyGitConfig": false,
-                "dev.containers.gitCredentialHelperConfigLocation": "none",
-                "dev.containers.dockerCredentialHelper": false,
-                "terminal.integrated.showExitAlert": false,
-                "terminal.integrated.profiles.linux": {
-                    "bash": {
-                        "path": "bash",
-                        "icon": "terminal-bash"
-                    }
-                },
-                "terminal.integrated.defaultProfile.linux": "bash",
-                "explorer.autoReveal": false,
-                "explorer.confirmDragAndDrop": false,
-                "files.trimTrailingWhitespace": true,
-                "markdown.extension.toc.levels": "2..3",
-                "markdown.extension.toc.updateOnSave": false
-            }
-        }
-    },
+//     "customizations": {
+//         "vscode": {
+//             "extensions": [
+//                 "golang.Go",
+//                 "yzhang.markdown-all-in-one",
+//                 "ms-python.python"
+//             ],
+//             "settings": {
+//                 "telemetry.telemetryLevel": "off",
+//                 "security.workspace.trust.emptyWindow": false,
+//                 "security.workspace.trust.enabled": false,
+//                 "extensions.ignoreRecommendations": true,
+//                 "dev.containers.copyGitConfig": false,
+//                 "dev.containers.gitCredentialHelperConfigLocation": "none",
+//                 "dev.containers.dockerCredentialHelper": false,
+//                 "terminal.integrated.showExitAlert": false,
+//                 "terminal.integrated.profiles.linux": {
+//                     "bash": {
+//                         "path": "bash",
+//                         "icon": "terminal-bash"
+//                     }
+//                 },
+//                 "terminal.integrated.defaultProfile.linux": "bash",
+//                 "explorer.autoReveal": false,
+//                 "explorer.confirmDragAndDrop": false,
+//                 "files.trimTrailingWhitespace": true,
+//                 "markdown.extension.toc.levels": "2..3",
+//                 "markdown.extension.toc.updateOnSave": false
+//             }
+//         }
+//     },
 
-    "mounts": [
-        "source=${localEnv:HOME}/.bash_history,target=/home/user/.bash_history,type=bind,consistency=cached",
-        "source=${localEnv:HOME}/.gitconfig,target=/home/user/.gitconfig,type=bind,consistency=cached",
-        "source=${localEnv:HOME}/.ssh,target=/home/user/.ssh,type=bind,consistency=cached",
-        "source=/etc/resolv.conf,target=/etc/resolv.conf,type=bind,consistency=cached"
-    ],
+//     "mounts": [
+//         "source=${localEnv:HOME}/.bash_history,target=/home/user/.bash_history,type=bind,consistency=cached",
+//         "source=${localEnv:HOME}/.gitconfig,target=/home/user/.gitconfig,type=bind,consistency=cached",
+//         "source=${localEnv:HOME}/.ssh,target=/home/user/.ssh,type=bind,consistency=cached",
+//         "source=/etc/resolv.conf,target=/etc/resolv.conf,type=bind,consistency=cached"
+//     ],
 
-    "containerEnv": {
-        "EDITOR": "vim",
-        "GIT_EDITOR": "vim"
-    },
+//     "containerEnv": {
+//         "EDITOR": "vim",
+//         "GIT_EDITOR": "vim"
+//     },
 
-    "postCreateCommand": "go get",
-    "remoteUser": "user"
-}
+//     "postCreateCommand": "go get",
+//     "remoteUser": "user"
+// }

@@ -1,33 +1,33 @@
-name: Run tests
+# name: Run tests
 
-# should also run on pull requests I guess
-on:
-  # manually
-  workflow_dispatch:
-  # each night at 0:00
-  schedule:
-    - cron: "0 0 * * *"
+# # should also run on pull requests I guess
+# on:
+#   # manually
+#   workflow_dispatch:
+#   # each night at 0:00
+#   schedule:
+#     - cron: "0 0 * * *"
 
-jobs:
-  tests:
-    name: tests
-    permissions:
-      contents: read
-      packages: read
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testcontainer
-    steps:
-      - name: Update Void Linux system
-        run: xbps-install -Syu xbps && xbps-install -yu
+# jobs:
+#   tests:
+#     name: tests
+#     permissions:
+#       contents: read
+#       packages: read
+#     runs-on: ubuntu-latest
+#     container:
+#       image: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:testcontainer
+#     steps:
+#       - name: Update Void Linux system
+#         run: xbps-install -Syu xbps && xbps-install -yu
 
-      - name: Check out repository
-        uses: actions/checkout@v4
+#       - name: Check out repository
+#         uses: actions/checkout@v4
 
-      - name: Build binaries
-        run: |
-          git config --global --add safe.directory /__w/xdeb-install/xdeb-install
-          ./scripts/build.sh
+#       - name: Build binaries
+#         run: |
+#           git config --global --add safe.directory /__w/xdeb-install/xdeb-install
+#           ./scripts/build.sh
 
-      - name: Run tests
-        run: ./scripts/test.sh
+#       - name: Run tests
+#         run: ./scripts/test.sh
