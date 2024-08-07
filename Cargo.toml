@@ -1,0 +1,15 @@
+[package]
+name = "xdeb-install-rs"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "xdeb-install"
+path = "src/main.rs"
+
+[lib]
+name = "xdeb_install_common"
+path = "lib/lib.rs"
+
+[dependencies]
+clap = { version = "4.5.13", features = ["derive"] }
